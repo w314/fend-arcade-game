@@ -27,9 +27,10 @@ Enemy.prototype.render = function() {
 class Enemy {
   // Variables applied to each of our instances go here,
   // we've provided one for you to get started
-  constructor(x, y) {
-    this.x = x;
+  constructor(y, speed) {
+    this.x = -100;
     this.y = y;
+    this.speed = speed;
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
@@ -41,6 +42,7 @@ class Enemy {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.y = this.speed * dt;
   }
   // Draw the enemy on the screen, required method for game
   render() {
@@ -54,20 +56,54 @@ class Enemy {
 // a handleInput() method.
 class Player {
 
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
+  constructor() {
     this.sprite = 'images/char-boy.png';
+    this.maxWidth = 505;
+    this.maxHeigth = 606;
+    this.sideStep = this.maxWidth / 5;
+    this.step = 83;
+    this.x = 2 * this.sideStep;
+    this.yFix = this.sideStep - this.step;
+    this.y = 5 * this.step - this.yFix;
   }
+  // console.log(maxWidth);
 
   update() {
-
   }
+
   render() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   }
 
+  stepUp() {
+    console.log('inside stepUP');
+    if(this.y < this.step - this.yFix) {
+      console.log('restart game');
+    } else {
+      this.y -= this.step;
+    }
+    console.log('after step:');
+    console.log(this.x, this.y);
+  }
+
+
   handleInput(key) {
+    console.log(key);
+    console.log(this.x, this.y)
+    switch(key) {
+      case 'down':
+        this.y = this.y > this.step * 4 ? this.y : this.y + this.step;
+        break;
+      case 'up':
+        this.stepUp();
+        break;
+      case 'right':
+        this.x = this.x > this.sideStep * 3 ? this.x : this.x + this.sideStep;
+        break;
+      case 'left' :
+        this.x = this.x < this.sideStep ? this.x : this.x - this.sideStep;
+    }
+
 
   }
 
@@ -78,10 +114,11 @@ class Player {
 // Place the player object in a variable called player
 const allEnemies = [];
 for(let i=0; i<3; i++){
-  let enemy = new Enemy(0, i*80 + 70);
+  let enemy = new Enemy(i*80 + 65, i*2);
   allEnemies.push(enemy);
 }
-const player = new Player(200, 400);
+const player = new Player();
+
 
 
 // This listens for key presses and sends the keys to your
