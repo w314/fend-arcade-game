@@ -28,7 +28,8 @@ class Enemy {
   // Variables applied to each of our instances go here,
   // we've provided one for you to get started
   constructor(y, speed) {
-    this.x = -100;
+    this.start = -75;
+    this.x = this.start;
     this.y = y;
     this.speed = speed;
     // The image/sprite for our enemies, this uses
@@ -42,7 +43,10 @@ class Enemy {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.y = this.speed * dt;
+    this.x += this.speed * dt;
+    if(this.x > 505 ){
+      this.x = this.start;
+    }
   }
   // Draw the enemy on the screen, required method for game
   render() {
@@ -55,7 +59,6 @@ class Enemy {
 // This class requires an update(), render() and
 // a handleInput() method.
 class Player {
-
   constructor() {
     this.sprite = 'images/char-boy.png';
     this.maxWidth = 505;
@@ -76,20 +79,20 @@ class Player {
   }
 
   stepUp() {
-    console.log('inside stepUP');
+    // console.log('inside stepUP');
     if(this.y < this.step - this.yFix) {
-      console.log('restart game');
+      // console.log('restart game');
     } else {
       this.y -= this.step;
     }
-    console.log('after step:');
-    console.log(this.x, this.y);
+    // console.log('after step:');
+    // console.log(this.x, this.y);
   }
 
 
   handleInput(key) {
-    console.log(key);
-    console.log(this.x, this.y)
+    // console.log(key);
+    // console.log(this.x, this.y)
     switch(key) {
       case 'down':
         this.y = this.y > this.step * 4 ? this.y : this.y + this.step;
@@ -114,9 +117,14 @@ class Player {
 // Place the player object in a variable called player
 const allEnemies = [];
 for(let i=0; i<3; i++){
-  let enemy = new Enemy(i*80 + 65, i*2);
+  // let y = i * 101 + 65;
+  let enemy = new Enemy(i*83 + 60, i*20 + 30);
+  // console.log(enemy);
   allEnemies.push(enemy);
+  // console.log(allEnemies[i]);
 }
+// console.log(allEnemies);
+// console.log(allEnemies[1]);
 const player = new Player();
 
 
