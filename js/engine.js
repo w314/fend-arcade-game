@@ -9,7 +9,7 @@
  * drawn but that is not the case. What's really happening is the entire "scene"
  * is being drawn over and over, presenting the illusion of animation.
  *
- * This engine makes the canvas' context (ctx) object globally available to make 
+ * This engine makes the canvas' context (ctx) object globally available to make
  * writing app.js a little simpler to work with.
  */
 
@@ -46,6 +46,7 @@ var Engine = (function(global) {
          */
         update(dt);
         render();
+        // checkCollisions();
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -68,6 +69,35 @@ var Engine = (function(global) {
         main();
     }
 
+
+    function checkCollisions() {
+      const xDistance = 0.15;
+      const yDistance = 40;
+      for(let i=0; i < allEnemies.length; i++) {
+        // if(Math.abs(allEnemies[i].y-player.y) < xDistance && Math.abs(allEnemies[i].x-player.x) < (yDistance / allEnemies[i].speed)) {
+          if(Math.abs(allEnemies[i].y-player.y) < yDistance && Math.abs(allEnemies[i].x-player.x) < xDistance * allEnemies[i].speed) {
+          console.log('Y coordinates of enemy and player');
+          console.log(allEnemies[i].y);
+          console.log(player.y);
+          console.log('X coordinates of enemy and player');
+          console.log(allEnemies[i].x);
+          console.log(player.x);
+          console.log('speed of enemy');
+          console.log(allEnemies[0].speed)
+          console.log(allEnemies);
+          console.log(player);
+          console.log('collision');
+          // allEnemies.forEach(
+          //   enemy => enemy.speed = 0
+          // );
+          alert('Game Over');
+          init();
+      }
+    }
+  }
+
+
+
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
      * you implement your collision detection (when two entities occupy the
@@ -79,7 +109,8 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        //HERE ORIGINALY TAKING AFTER RENDER AS IT SHOWS COLLISIONS BEFORE IT's SHOWN
+        checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
@@ -117,7 +148,7 @@ var Engine = (function(global) {
             numRows = 6,
             numCols = 5,
             row, col;
-        
+
         // Before drawing, clear existing canvas
         ctx.clearRect(0,0,canvas.width,canvas.height)
 
@@ -161,7 +192,8 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        //set player to starting position
+        player.reset();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
