@@ -21,20 +21,23 @@ class Enemy {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    //if enemy has reached the end of it's lane
-    if(this.x > game.canvasWidth) {
-      //give x the starting value to send it back to the beginning of the lane
-      this.x = this.xStart;
-      //select a new random lane for the enemy to reappear in
-      //just to make the game less predictable
-      this.y = this.randomLane();
-      // FOR TESTING PURPOSES ONLY
-      if(testing) {
-        this.y = lane;
+    //if game is not fozen move eneimes
+    if(game.gameOn) {
+      //if enemy has reached the end of it's lane
+      if(this.x > game.canvasWidth) {
+        //give x the starting value to send it back to the beginning of the lane
+        this.x = this.xStart;
+        //select a new random lane for the enemy to reappear in
+        //just to make the game less predictable
+        this.y = this.randomLane();
+        // FOR TESTING PURPOSES ONLY
+        if(testing) {
+          this.y = lane;
+        }
+      } else {
+        //otherwise just adjust x coordinate according to it's speed
+        this.x += this.speed * dt;
       }
-    } else {
-      //otherwise just adjust x coordinate according to it's speed
-      this.x += this.speed * dt;
     }
   }
 
@@ -52,6 +55,7 @@ class Enemy {
       this.y = lane;
       this.speed = speed;
     }
+  }
 
   /**
    * @description Draws the enemy on the screen.
@@ -174,8 +178,10 @@ class Game {
   constructor(enemy = 4) {
     //set number of enemies in the game
     this.enemyNumber = enemy;
-    //set value showing if the game is active, currently under play
+    //declare value to show if the game is active, currently under play
     //not over (due to either collision or win)
+    //Player class uses it freeze player in handleInput function
+    //Enemy class uses it to freeze enemies in update function
     this.gameOn = true;
     //set canvas variables
     //width of canvas, used by Player class to determine the length of steps on the x axis
@@ -221,19 +227,6 @@ class Game {
   }
 
   /**
-   * @description Pauses the game
-   */
-  pause() {
-    //set enemy speeds to 0
-    allEnemies.forEach(
-      enemy => enemy.speed = 0
-    );
-    //set gameOn variebel to false
-    //Player class uses it freeze player in handleInput function
-    this.gameOn = false;
-  }
-
-  /**
    * @description Resets game to starting position
    */
   reset() {
@@ -270,12 +263,16 @@ class Game {
   }
 
   collision() {
-    this.pause();
+    //freeze game
+    this.gameOn = false;
+    //show 'collsion type' game modal
     this.showGameModal('collision');
   }
 
   win() {
-    this.pause();
+    //freeze game
+    this.gameOn = false;
+    //show 'win type' game modal
     this.showGameModal('win');
   }
 }
@@ -284,7 +281,7 @@ class Game {
 //set number of enemies
 let enemyNumber = 5;
 
-//variables for testing
+//VARIBALES FOR TESTING ONLY
 const testing = false;
 const lane = 2 * 83 + 60;
 const speed = 500;
