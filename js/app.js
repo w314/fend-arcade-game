@@ -25,7 +25,7 @@ class Enemy {
     // which will ensure the game runs at the same speed for
     // all computers.
     //if enemy has reached the end of it's lane
-    if(this.x > canvasWidth) {
+    if(this.x > game.canvasWidth) {
       //give x the starting value to send it back to the beginning of the lane
       this.x = this.xStart;
       //select a new random lane for the enemy to reappear in
@@ -81,9 +81,9 @@ class Player {
     //set the image for the player
     this.sprite = 'images/char-boy.png';
     //set step length on the x axis
-    this.sideStep = canvasWidth / 5;
+    this.sideStep = game.canvasWidth / 5;
     //set step length on the y axis
-    this.step = blockHeigth;
+    this.step = game.blockHeigth;
     //set starting x coordinate for player
     //place player in the middle block
     //two sideSteps to the right from the left edge of the canvas
@@ -125,7 +125,8 @@ class Player {
    * @param {string}  key direction of player movement
    */
   handleInput(key) {
-    if(!game.ended) {
+    //only react to keys if the game is on
+    if(game.gameOn) {
       //in each case check if player has reached the end of the canvas
       //if it did, do not change the coordinates, leave player where it was
       //if there is room to move, move player to the direction requested
@@ -137,7 +138,7 @@ class Player {
           // this.y = this.y <= this.yPlayerWins ? this.y : this.y - this.step;
           this.y -= this.step;
           if(this.y <= this.yPlayerWins) {
-            game.end();
+            game.win();
           }
 
           break;
@@ -151,109 +152,90 @@ class Player {
   }
 }
 
+
 class Game {
   constructor(enemy = 4) {
     this.enemyNumber = enemy;
-    this.pausedEnemySpeeds = [];
-    this.initEnemySpeeds();
-    this.paused = false;
-    this.ended = false;
+    // this.pausedEnemySpeeds = [];
+    // this.initEnemySpeeds();
+    // this.paused = false;
+    this.gameOn = true;
+    //set canvas variables
+    this.canvasWidth = 505;
+    this.blockHeigth = 83;
+    //add click listener to end game modal new game button
+    this.gameModalSetup();
   }
 
-  initEnemySpeeds() {
-    for(let i = 0; i < this.enemyNumber; i++) {
-      this.pausedEnemySpeeds.push(0);
-    }
-    console.log('aftern initating speeds');
-    console.log(this.pausedEnemySpeeds);
+  gameModalSetup() {
+    const gameModal = document.getElementsByClassName('game-modal')[0];
+    const gameModalNewGame = document.getElementsByClassName('new-game')[0];
+    //add event listener to game modal's new game button
+    gameModalNewGame.addEventListener('click',
+       () => {
+         gameModal.classList.add('hidden');
+         this.reset();
+       }
+     )
+
   }
 
   pause() {
-    if(!this.paused) {
-      for(let i = 0; i < this.enemyNumber; i++) {
-        this.pausedEnemySpeeds[i] = allEnemies[i].speed;
-        allEnemies[i].speed = 0;
-      }
-    }
-    this.paused = true;
-    console.log('speeds after pauseing');
-    console.log(this.pausedEnemySpeeds);
-  }
-
-  end() {
-    // const endGameModal = document.getElementsByClassName('end-game-modal')[0];
-    // const endGameModalNewGame = document.getElementsByClassName('new-game')[0];
-
-    this.ended = true;
     allEnemies.forEach(
       enemy => enemy.speed = 0
+    )
+    this.gameOn = false;
+  }
+
+  reset() {
+    player.reset();
+    allEnemies.forEach(
+      enemy => enemy.reset()
     );
-    endGameModal.classList.remove('hidden');
-    //add click listener to end game modal new game button
-    //set focus to new game button:
-    // endGameModalNewGame.addEventListener('click',
-    //    () => {
-    //      document.getElementsByClassName('end-game-modal')[0].classList.add('hidden');
-    //      player.reset();
-    //      allEnemies.forEach(
-    //        enemy => enemy.reset()
-    //      );
-    //      game.ended = false;
-    //    }
-    // );
-    endGameModalNewGame.focus();
+    this.gameOn = true;
+  }
+
+  showGameModal(type) {
+    const gameModal = document.getElementsByClassName('game-modal')[0];
+    const gameModalNewGame = document.getElementsByClassName('new-game')[0];
+    const message = type === 'collision' ? 'Game Over' : 'Congratulation! You\'ve won!!';
+    const messageElement = document.getElementsByClassName('message')[0];
+    messageElement.innerText = message;
+    gameModal.classList.remove('hidden');
+    gameModal.classList.add(type);
+    gameModalNewGame.focus();
+  }
+
+  collision() {
+    this.pause();
+    this.showGameModal('collision');
+  }
+
+  win() {
+    this.pause();
+    this.showGameModal('win');
   }
 }
 
-//set canvas variables
-const canvasWidth = 505;
-const blockHeigth = 83;
 
 //intantiate game
 const game = new Game(1);
-console.log(game);
-console.log(game.enemyNumber);
-console.log(game.pausedEnemySpeeds);
 
 //set enemy variables
 const allEnemies = [];
-//TESTING TESTING TESTING
 // //instantiate enemies
 // for(let i=0; i<4; i++) {
 //   const enemy = new Enemy();
 //   allEnemies.push(enemy);
 // }
+
+// TESTING TESTING TESTING
 const enemy = new Enemy();
 enemy.speed = 400;
 allEnemies.push(enemy);
 
-
 //instantiate player
 const player = new Player();
-
-
-// //add click listener to end game modal close button
-// const endGameModalClose = document.getElementsByClassName('close')[0];
-// endGameModalClose.addEventListener('click',
-//    () => document.getElementsByClassName('end-game-modal')[0].classList.add('hidden')
-// );
-
-
-//add click listener to end game modal new game button
-const endGameModal = document.getElementsByClassName('end-game-modal')[0];
-const endGameModalNewGame = document.getElementsByClassName('new-game')[0];
-//set focus to new game button:
-endGameModalNewGame.addEventListener('click',
-   () => {
-     endGameModal.classList.add('hidden');
-     player.reset();
-     allEnemies.forEach(
-       enemy => enemy.reset()
-     );
-     game.ended = false;
-   }
-);
-
 
 // create event listener for key presses
 document.addEventListener('keyup', function(e) {

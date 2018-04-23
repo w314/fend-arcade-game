@@ -10,7 +10,7 @@ p {
  * Styles for the end-game-modal
  */
 
-.end-game-modal {
+.game-modal {
     margin: auto;
     width: 60%;
     max-width: 550px;
@@ -27,7 +27,7 @@ p {
   margin: 10px 0 0 0;
 }
 
-.congratulation {
+.message {
   text-shadow: white 1px 0 10px ;
   margin: 0;
   padding: 0 0 0 20px;
@@ -37,7 +37,7 @@ p {
   margin: 10px auto 20px auto;
 }
 
-.end-game-modal button {
+.game-modal button {
   background-color: silver;
   padding: 10px;
   border: solid 1px white;

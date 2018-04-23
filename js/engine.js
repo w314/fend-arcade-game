@@ -76,22 +76,23 @@ var Engine = (function(global) {
       for(let i=0; i < allEnemies.length; i++) {
         // if(Math.abs(allEnemies[i].y-player.y) < xDistance && Math.abs(allEnemies[i].x-player.x) < (yDistance / allEnemies[i].speed)) {
           if(Math.abs(allEnemies[i].y-player.y) < yDistance && Math.abs(allEnemies[i].x-player.x) < xDistance * allEnemies[i].speed) {
-          console.log('Y coordinates of enemy and player');
-          console.log(allEnemies[i].y);
-          console.log(player.y);
-          console.log('X coordinates of enemy and player');
-          console.log(allEnemies[i].x);
-          console.log(player.x);
-          console.log('speed of enemy');
-          console.log(allEnemies[0].speed)
-          console.log(allEnemies);
-          console.log(player);
-          console.log('collision');
-          // allEnemies.forEach(
-          //   enemy => enemy.speed = 0
-          // );
-          alert('Game Over');
-          init();
+            game.collision();
+            // console.log('collision');
+            // console.log('Y coordinates of enemy and player');
+            // console.log(allEnemies[i].y);
+            // console.log(player.y);
+            // console.log('X coordinates of enemy and player');
+            // console.log(allEnemies[i].x);
+            // console.log(player.x);
+            // console.log('enemy speed');
+            // console.log(game.pausedEnemySpeeds[0]);
+            // console.log('x distance for collision:');
+            // console.log(game.pausedEnemySpeeds[0] * xDistance);
+            // console.log(allEnemies);
+            // console.log(player);
+            // console.log(game);
+          // setTimeout(() => alert('Game Over'),10);
+          // game.reset();
       }
     }
   }
@@ -110,7 +111,7 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         //HERE ORIGINALY TAKING AFTER RENDER AS IT SHOWS COLLISIONS BEFORE IT's SHOWN
-        checkCollisions();
+        setTimeout(checkCollisions(),10);
     }
 
     /* This is called by the update function and loops through all of the
@@ -192,8 +193,6 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        //set player to starting position
-        player.reset();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
