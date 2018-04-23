@@ -77,20 +77,20 @@ var Engine = (function(global) {
         // if(Math.abs(allEnemies[i].y-player.y) < xDistance && Math.abs(allEnemies[i].x-player.x) < (yDistance / allEnemies[i].speed)) {
           if(Math.abs(allEnemies[i].y-player.y) < yDistance && Math.abs(allEnemies[i].x-player.x) < xDistance * allEnemies[i].speed) {
             game.collision();
-            // console.log('collision');
-            // console.log('Y coordinates of enemy and player');
-            // console.log(allEnemies[i].y);
-            // console.log(player.y);
-            // console.log('X coordinates of enemy and player');
-            // console.log(allEnemies[i].x);
-            // console.log(player.x);
+            console.log('collision');
+            console.log('Y coordinates of enemy and player');
+            console.log(allEnemies[i].y);
+            console.log(player.y);
+            console.log('X coordinates of enemy and player');
+            console.log(allEnemies[i].x);
+            console.log(player.x);
             // console.log('enemy speed');
             // console.log(game.pausedEnemySpeeds[0]);
             // console.log('x distance for collision:');
             // console.log(game.pausedEnemySpeeds[0] * xDistance);
-            // console.log(allEnemies);
-            // console.log(player);
-            // console.log(game);
+            console.log(allEnemies);
+            console.log(player);
+            console.log(game);
           // setTimeout(() => alert('Game Over'),10);
           // game.reset();
       }

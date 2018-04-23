@@ -7,11 +7,8 @@ class Enemy {
     //xStart is the starting x position to draw enemies in their lane
     //it's set to -75 to make them apper gradually
     this.xStart = -75;
-    this.x = this.xStart;
-    //determine a random lane for the enemy
-    this.y = this.randomLane();
-    //determine a random speed for the enemy
-    this.speed = this.randomSpeed();
+    //set the speed and the x & y coordinates of the enemy
+    this.reset()
     //set enemy image
     this.sprite = 'images/enemy-bug.png';
   }
@@ -31,17 +28,30 @@ class Enemy {
       //select a new random lane for the enemy to reappear in
       //just to make the game less predictable
       this.y = this.randomLane();
+      // FOR TESTING PURPOSES ONLY
+      if(testing) {
+        this.y = lane;
+      }
     } else {
       //otherwise just adjust x coordinate according to it's speed
       this.x += this.speed * dt;
     }
   }
 
+  /**
+   * @description Set enemies parameters to start a new game
+   */
   reset() {
     this.x = this.xStart;
+    //determine a random lane for the enemy
     this.y = this.randomLane();
+    //determine a random speed for the enemy
     this.speed = this.randomSpeed();
-  }
+    // FOR TESTING PURPOSES ONLY
+    if(testing) {
+      this.y = lane;
+      this.speed = speed;
+    }
 
   /**
    * @description Draws the enemy on the screen.
@@ -107,9 +117,7 @@ class Player {
     this.y = this.yStart;
   }
 
-  /**
-   * @description Checks for end of game
-   */
+  // HAS NO FUNCTION, LEFT HERE AS THE ENGINE CALLS IT
   update() {
   }
 
@@ -132,20 +140,23 @@ class Player {
       //if there is room to move, move player to the direction requested
       switch(key) {
         case 'down':
+          //if player has room to move down take a step down
           this.y = this.y > this.step * 4 ? this.y : this.y + this.step;
           break;
         case 'up':
-          // this.y = this.y <= this.yPlayerWins ? this.y : this.y - this.step;
+          //take a setp up
           this.y -= this.step;
+          //if player has reached the water call game's win funtion
           if(this.y <= this.yPlayerWins) {
             game.win();
           }
-
           break;
         case 'right':
+          //if player has room to move, take a step to the right
           this.x = this.x > this.sideStep * 3 ? this.x : this.x + this.sideStep;
           break;
         case 'left' :
+          //if player has room to move, take a step to the left
           this.x = this.x < this.sideStep ? this.x : this.x - this.sideStep;
       }
     }
@@ -153,56 +164,108 @@ class Player {
 }
 
 
+/** Class representing a game */
 class Game {
+
+  /**
+   * @description Creates a game.
+   * @param {number} enemy - number of enemies in the game, default set to 4
+   */
   constructor(enemy = 4) {
+    //set number of enemies in the game
     this.enemyNumber = enemy;
-    // this.pausedEnemySpeeds = [];
-    // this.initEnemySpeeds();
-    // this.paused = false;
+    //set value showing if the game is active, currently under play
+    //not over (due to either collision or win)
     this.gameOn = true;
     //set canvas variables
+    //width of canvas, used by Player class to determine the length of steps on the x axis
     this.canvasWidth = 505;
+    //height of blocks, used by Player class to determine the length of steps on the y axis
     this.blockHeigth = 83;
-    //add click listener to end game modal new game button
+    //add click listener to end game modal & new game button
     this.gameModalSetup();
   }
 
+  /**
+   * @description Instantiates the eneimes
+   * @return {array} array of all the enemy object in the game
+   */
+  initEnemies() {
+    //declare array to hold enemy objects
+    const allEnemies = [];
+    //instantiate enemies
+    for(let i=0; i<this.enemyNumber; i++) {
+      const enemy = new Enemy();
+      allEnemies.push(enemy);
+    }
+    return allEnemies;
+  }
+
+  /**
+   * @description Sets up the game modal
+   */
   gameModalSetup() {
+    //declare variable for game modal
     const gameModal = document.getElementsByClassName('game-modal')[0];
+    //declare variable for the new game button on the game modal
     const gameModalNewGame = document.getElementsByClassName('new-game')[0];
     //add event listener to game modal's new game button
     gameModalNewGame.addEventListener('click',
        () => {
+         //hide game modal
          gameModal.classList.add('hidden');
+         //restart game
          this.reset();
        }
      )
-
   }
 
+  /**
+   * @description Pauses the game
+   */
   pause() {
+    //set enemy speeds to 0
     allEnemies.forEach(
       enemy => enemy.speed = 0
-    )
+    );
+    //set gameOn variebel to false
+    //Player class uses it freeze player in handleInput function
     this.gameOn = false;
   }
 
+  /**
+   * @description Resets game to starting position
+   */
   reset() {
+    //reset player to staring position
     player.reset();
+    //reset enemies to starting position
     allEnemies.forEach(
       enemy => enemy.reset()
     );
+    //set gameOn to true to unfreeze the game
     this.gameOn = true;
   }
 
+  /**
+   * @description Make game modal appear with correct messag and style
+   * @param {String} type - determines if modal is needed for collision or win
+   */
   showGameModal(type) {
+    //variable for game modal
     const gameModal = document.getElementsByClassName('game-modal')[0];
+    //variable for game modal's new game button
     const gameModalNewGame = document.getElementsByClassName('new-game')[0];
+    //set message variable based on type
     const message = type === 'collision' ? 'Game Over' : 'Congratulation! You\'ve won!!';
+    //add message to game modal
     const messageElement = document.getElementsByClassName('message')[0];
     messageElement.innerText = message;
+    //make game modal appear
     gameModal.classList.remove('hidden');
+    //choose style for game modal
     gameModal.classList.add(type);
+    //add focus to new game button
     gameModalNewGame.focus();
   }
 
@@ -218,21 +281,22 @@ class Game {
 }
 
 
+//set number of enemies
+let enemyNumber = 5;
+
+//variables for testing
+const testing = false;
+const lane = 2 * 83 + 60;
+const speed = 500;
+if(testing) {
+  enemyNumber = 1;
+}
+
 //intantiate game
-const game = new Game(1);
+const game = new Game(enemyNumber);
 
-//set enemy variables
-const allEnemies = [];
-// //instantiate enemies
-// for(let i=0; i<4; i++) {
-//   const enemy = new Enemy();
-//   allEnemies.push(enemy);
-// }
-
-// TESTING TESTING TESTING
-const enemy = new Enemy();
-enemy.speed = 400;
-allEnemies.push(enemy);
+//set enemy variable
+const allEnemies = game.initEnemies();
 
 //instantiate player
 const player = new Player();
