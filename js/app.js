@@ -220,6 +220,9 @@ class Game {
        () => {
          //hide game modal
          gameModal.classList.add('hidden');
+         //remove classes showing type of game modal
+         gameModal.classList.remove('collision');
+         gameModal.classList.remove('win');
          //restart game
          this.reset();
        }
@@ -250,7 +253,7 @@ class Game {
     //variable for game modal's new game button
     const gameModalNewGame = document.getElementsByClassName('new-game')[0];
     //set message variable based on type
-    const message = type === 'collision' ? 'Game Over' : 'Congratulation! You\'ve won!!';
+    const message = type === 'collision' ? 'Game Over!' : 'Congratulation! You\'ve won!!';
     //add message to game modal
     const messageElement = document.getElementsByClassName('message')[0];
     messageElement.innerText = message;

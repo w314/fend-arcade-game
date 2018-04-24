@@ -7,18 +7,29 @@ p {
 }
 
 /*
- * Styles for the end-game-modal
+ * Styles for the game-modal
  */
 
 .game-modal {
     margin: auto;
     width: 60%;
     max-width: 550px;
-    overflow: auto; /* Enable scroll if needed */
-    background: linear-gradient(160deg, #aa7ecd 0%, #02ccba 100%);
-    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+    overflow: auto;
     border-radius: 10px;
-    border: solid 5px #aa7ecd;
+}
+
+/* game modal style in case of win */
+.win {
+  background: linear-gradient(160deg, #aa7ecd 0%, #02ccba 100%);
+  box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+  border: solid 5px #aa7ecd;
+}
+
+/* game modal style in case of collision */
+.collision {
+  background: linear-gradient(160deg, red 0%, white 100%);
+  box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+  border: solid 5px Maroon;
 }
 
 .modal-header {
@@ -37,10 +48,12 @@ p {
   margin: 10px auto 20px auto;
 }
 
-.game-modal button {
+/* styles for new game button */
+.new-game {
   background-color: silver;
+  font-weight: bold;
   padding: 10px;
-  border: solid 1px white;
+  border: solid 2px white;
   border-radius: 5px;
   box-shadow: 5px 5px 10px silver;
 }

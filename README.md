@@ -1,6 +1,20 @@
-frontend-nanodegree-arcade-game
-===============================
+#Arcade Game
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+##Description
+This is an arcade game, where the goal is to move your player to the water without colliding with the bugs.
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+##Instructions
+
+###How to run the game
+Open the index.html file in your browser and the game starts as soon as the page is loaded
+
+###How to play the game
+Use the up, down, left or right arrow keys to move your player in the field.
+Try to avoid colliding with the bugs crawling across the screen.
+In case of a collision a "Game Over" message pops up, you can choose to start a new game by clicking the "New Game" button or by pressing enter.
+If you successfully get to the water you have won!
+You can start a new game by clicking the "New Game" in the window popping up or simply by pressing enter.
+Have fun!
+
+##Acknowledgements
+Udacity: game engine and images
